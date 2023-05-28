@@ -52,4 +52,21 @@ def BimonthlyCreator(weeksOfMonths):
         
     return(BimonthlyPeriods)
 
--print(BimonthlyCreator(monthdayextractor()))
+
+
+def BimonthlyWeekDaysCreator(BimonthlyPeriods):
+    CleanDaysOfBimonthly = []
+    BimonthlyWeekdays = []
+    for Bimonthly in BimonthlyPeriods:
+        Holder = []
+        for day in Bimonthly:
+            if (day[1] < 5):
+                Holder.append(day)
+        CleanDaysOfBimonthly.append(Holder)      
+    return(CleanDaysOfBimonthly)
+
+
+
+
+#print(BimonthlyCreator(monthdayextractor()))
+print(BimonthlyWeekDaysCreator(BimonthlyCreator(monthdayextractor())))
