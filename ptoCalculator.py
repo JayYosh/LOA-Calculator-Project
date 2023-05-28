@@ -27,9 +27,10 @@ def monthdayextractor():
     AllDaysList = []
     while (startCounter % 12) != (endDate[0] + 1):
         HoldingList = []
-        for day in calendardata.itermonthdays2(startDate[2] + (math.floor(startCounter/12) ) , startCounter):
+        for day in calendardata.itermonthdays2(startDate[2] + (math.floor(startCounter/12) ) , (startCounter % 12)):
             HoldingList.append(day)
         AllDaysList.append(HoldingList)
-    print(AllDaysList)
+        startCounter += 1
+    return(AllDaysList)
 
 monthdayextractor()
