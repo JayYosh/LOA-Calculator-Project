@@ -8,6 +8,7 @@ startDate = [int(startDate[:2]), int(startDate[3:5]), int(startDate[6:])]
 endDate = input("End date (Ex. 02/19/2018, Month/Day/Year): ")
 endDate = [int(endDate[:2]), int(endDate[3:5]), int(endDate[6:])]
 
+
 #creating a calendar data set
 calendardata = calendar.Calendar()
 
@@ -52,7 +53,7 @@ def BimonthlyCreator(weeksOfMonths):
         
     return(BimonthlyPeriods)
 
-
+#only grabs the weekdays of the bimonthly periods
 
 def BimonthlyWeekDaysCreator(BimonthlyPeriods):
     CleanDaysOfBimonthly = []
@@ -66,7 +67,22 @@ def BimonthlyWeekDaysCreator(BimonthlyPeriods):
     return(CleanDaysOfBimonthly)
 
 
+#finds the average pay of each day
+
+def DailyPay(CleanDaysofBimonthly):
+    YearlyWage = int(input("Input Yearly Income (ex. 120000. no commas.): "))
+    BimonthlyPay = (YearlyWage/24)
+    for bimonthlyPeriods in CleanDaysofBimonthly:
+        bimonthlyPeriods.append(BimonthlyPay/len(bimonthlyPeriods))
+    return(CleanDaysofBimonthly)
+     
+
+
+
+
+
 
 
 #print(BimonthlyCreator(monthdayextractor()))
-print(BimonthlyWeekDaysCreator(BimonthlyCreator(monthdayextractor())))
+#print(BimonthlyWeekDaysCreator(BimonthlyCreator(monthdayextractor())))
+print(DailyPay(BimonthlyWeekDaysCreator(BimonthlyCreator(monthdayextractor()))))
