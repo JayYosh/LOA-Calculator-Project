@@ -33,4 +33,23 @@ def monthdayextractor():
         startCounter += 1
     return(AllDaysList)
 
-monthdayextractor()
+
+
+#taking the amount of days in those months and dividing them into bi monthly pay segments
+
+def BimonthlyCreator(weeksOfMonths):
+    CleanDaysOfMonth = []
+    Holder = []
+    BimonthlyPeriods = []
+    for month in weeksOfMonths:
+        for day in month:
+            if day[0] != 0:
+                Holder.append(day)
+        CleanDaysOfMonth.append(Holder)
+    for month in CleanDaysOfMonth:
+        BimonthlyPeriods.append(month[:15])
+        BimonthlyPeriods.append(month[15:])
+        
+    return(BimonthlyPeriods)
+
+-print(BimonthlyCreator(monthdayextractor()))
