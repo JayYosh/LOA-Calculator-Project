@@ -100,6 +100,17 @@ def InDatePeriod(CleanDaysofBimonthly):
                 CleanDaysofBimonthly[-1].remove(day)
     return(CleanDaysofBimonthly)
 
+def Holidays(CleanDaysofBimonthly):
+    Holiday = ''
+    Holiday = input("List Holidays or Days off (ex. 06/04). When you are finished type 'done': ")
+    while (Holiday != 'Done') and (Holiday != 'done'):
+        Holiday2 = (int(Holiday[:2]), int(Holiday[3:]))
+        for day in CleanDaysofBimonthly[Holiday2[1]*2-1: Holiday2[1]*2]:
+            if Holiday2[1] == day[0]:
+                CleanDaysofBimonthly.remove(Holiday2)
+        Holiday = input("List Holidays or Days off (ex. 06/04). When you are finished type 'done': ")
+    return(CleanDaysofBimonthly)
+        
 
 
 
@@ -115,4 +126,5 @@ def InDatePeriod(CleanDaysofBimonthly):
 
 #print(BimonthlyCreator(monthdayextractor()))
 #print(BimonthlyWeekDaysCreator(BimonthlyCreator(monthdayextractor())))
-print(InDatePeriod(DailyPay(BimonthlyWeekDaysCreator(BimonthlyCreator(monthdayextractor())))))
+#print(InDatePeriod(DailyPay(BimonthlyWeekDaysCreator(BimonthlyCreator(monthdayextractor())))))
+print(Holidays(InDatePeriod(DailyPay(BimonthlyWeekDaysCreator(BimonthlyCreator(monthdayextractor()))))))
