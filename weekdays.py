@@ -1,17 +1,4 @@
-import calendar
-import math
 
-#start date in months, days, year
-startDate = str(input("Start date (Ex. mm/nn/yyyy, Month/Day/Year): "))
-startDate = [int(startDate[:2]), int(startDate[3:5]), int(startDate[6:])]
-
-endDate = input("End date (Ex. mm/nn/yyyy, Month/Day/Year): ")
-endDate = [int(endDate[:2]), int(endDate[3:5]), int(endDate[6:])]
-
-#creating a calendar data set
-calendardata = calendar.Calendar()
-
-#PTO hours --> PTO days
 
 def PTOtoDays():
     PTOhoursLeft = 0
@@ -20,24 +7,24 @@ def PTOtoDays():
     PTOhoursLeft = PTOhours % 8
     return([PTOhours, PTOdays, PTOhoursLeft])
         
+
+SDIavailibity = 0
 def SDIandSDTL():
     SDI = int(input("how many weeks of SDI does employee get? (ex. 1, 8, etc. only one number): "))
     SDIamount = int(input("How much money is in one week of SDI: "))
     question = input("Does employee get SDTL? (y / n): ")
     SDTL = 0
     if question == 'y':
-        
+        SDIavailibity += 1 
         SDTL = int(input("how many days of STDL does employee get? (ex. 1, 8, etc. only one number): "))
     return([SDI, SDTL, SDIamount])
 
-def DailyPay(CleanDaysofBimonthly):
+def DailyPay():
     YearlyWage = int(input("Input Yearly Income (ex. 120000. no commas.): "))
-    global BimonthlyPay
-    BimonthlyPay = (YearlyWage/24)
-    for bimonthlyPeriods in CleanDaysofBimonthly:
-        bimonthlyPeriods.append(BimonthlyPay/len(bimonthlyPeriods))
-        bimonthlyPeriods.append([0])
-    return(CleanDaysofBimonthly)
+    global biweeklypay
+    biweeklypay = ((YearlyWage/52) * 2)
+    dailyamount = ((YearlyWage/52/5))
+    return(dailyamount)
      
 
 
@@ -46,12 +33,190 @@ def DailyPay(CleanDaysofBimonthly):
 
     return(biweekly)
 
+def loacalculator():
+    
+    numberofweeks = []
+    numberofLOA = []
+    week1 = ''
+    week2 = ''
+    digitofweeks = int(input("how total COMPLETE weeks are the employee gone for? : "))
+    
 
-def weeksofyear():
-    ListofWeeks = []
-    ListofWeeks.append(calendardata.itermonthdays2(startDate[2]))
+    if input("is there an incomplete week in the beginning? (y/n) ") == 'y':        
+        week1 = input("is it the first or second week of the pay cycle? (1/2): ")
+        beginningweek = (int(input("how many days are they gone for? (ex. 4): ")))
+        if week1 == '1':
+            numberofweeks.append(beginningweek)
+            
+
+    
+    for x in range(digitofweeks):
+        numberofweeks.append(5)
+
+
+    if input("is there an incomplete week in the end? (y/n):  "):
+        week2 = input("is it the first or second week of the pay cycle? (1/2): ")
+        endweek = (int(input("how many days are they gone for? (ex. 4): "))) 
+        numberofweeks.append(endweek)
+        
+    
+   
+
+    
+    
+    dailyamount = (DailyPay())
+
+
+    PTO = PTOtoDays()
+    PTOdays = PTO[1]
+    
+    SDIandSTDL = SDIandSDTL()
+    sdi = SDIandSTDL[0]
+    stdl = SDIandSTDL[1]
+    SDIamount = SDIandSTDL[2]
+    PTOamount = dailyamount
+    STDLamount = (dailyamount - int((SDIamount/5)))
+    
+    usedPTO = 0
+    usedSDI = 0
+    usedSTDL = 0
+    
+    
+    weekcounter = 1 
+    biweeklylistcounter = 0
+    for week in numberofweeks:
+        counter = 1
+        
+
+        if (weekcounter == 1):
+            numberofLOA.append([0])
+            if (week1 == '1'):
+                
+                
+                while counter != (beginningweek + 1):
+                    if (sdi > 0):
+                        if (counter == 1) or (counter == 6):
+                            usedSDI += 1
+                            sdi -= 1
+                            numberofLOA[biweeklylistcounter][0] += (SDIamount)
+                    if (stdl > 0):
+                        usedSTDL += 1
+                        stdl -= 1
+                        numberofLOA[biweeklylistcounter][0] += STDLamount
+                    elif ((PTOdays > 0) and (((numberofLOA[biweeklylistcounter][0] + PTOamount))) <= biweeklypay):
+                            usedPTO += 1
+                            PTOdays -= 1
+                            numberofLOA[biweeklylistcounter][0] += (dailyamount) 
+                    counter += 1
+            else:
+                while counter != beginningweek:
+                    numberofLOA[biweeklylistcounter] += (dailyamount*5)
+                    if (sdi > 0):
+                        if (counter == 1) or (counter == 6):
+                            usedSDI += 1
+                            sdi -= 1
+                            numberofLOA[biweeklylistcounter][0] += (SDIamount)
+                    if (stdl > 0):
+                        usedSTDL += 1
+                        stdl -= 1
+                        numberofLOA[biweeklylistcounter][0] += STDLamount
+                    elif ((PTOdays > 0) and ((numberofLOA[biweeklylistcounter][0] + PTOamount + (dailyamount*(10 - beginningweek))) <= biweeklypay)):
+                            usedPTO += 1
+                            PTOdays -= 1 
+                            numberofLOA[biweeklylistcounter][0] += (dailyamount) 
+                    counter += 1
+            if weekcounter % 2 == 0:    
+                numberofLOA[biweeklylistcounter].append([usedSDI, sdi, usedSTDL, stdl, usedPTO, PTOdays])
+                biweeklylistcounter += 1
+                numberofLOA.append([0])
+                weekcounter += 1
+                usedPTO = 0
+                usedSDI = 0
+                usedSTDL = 0
+            else: 
+                
+                weekcounter += 1
+                
+
+        elif weekcounter == len(numberofweeks):
+            if week2 == 1:
+                numberofLOA[biweeklylistcounter] += (5*dailyamount)
+            while counter != endweek:
+                if (sdi > 0):
+                    if (counter == 1):
+                        usedSDI += 1
+                        sdi -= 1
+                        numberofLOA[biweeklylistcounter][0] += (SDIamount)
+                if (stdl > 0) and ((counter == 1) or (counter == 6)):
+                    usedSTDL += 1
+                    stdl -= 1
+                    numberofLOA[biweeklylistcounter][0] += STDLamount
+                elif ((PTOdays > 0) and ((numberofLOA[biweeklylistcounter][0] + PTOamount) <= biweeklypay)):
+                        usedPTO += 1
+                        PTOdays -= 1
+                        numberofLOA[biweeklylistcounter][0] += (dailyamount) 
+                            
+                counter += 1  
+            if weekcounter % 2 == 0:
+                numberofLOA[biweeklylistcounter].append([usedSDI, sdi, usedSTDL, stdl, usedPTO, PTOdays])
+                biweeklylistcounter += 1
+                weekcounter += 1
+                usedPTO = 0
+                usedSDI = 0
+                usedSTDL = 0
+            else: 
+                weekcounter += 1
+                
+           
+                        
+
+        else:
+            counter = 1
+            while counter != 6:
+                if (sdi > 0):
+                    if (counter == 1) or (counter == 6):
+                            usedSDI += 1
+                            sdi -= 1
+                            numberofLOA[biweeklylistcounter][0] += (SDIamount)
+                if (stdl > 0):
+                            usedSTDL += 1
+                            stdl -= 1
+                            numberofLOA[counter] += STDLamount
+                elif ((PTOdays > 0) and ((numberofLOA[biweeklylistcounter][0] + PTOamount) <= biweeklypay)):
+                            usedPTO += 1
+                            PTOdays -= 1 
+                            numberofLOA[biweeklylistcounter][0] += (dailyamount)
+                counter += 1 
+            if weekcounter % 2 == 0:
+                numberofLOA[biweeklylistcounter].append([usedSDI, sdi, usedSTDL, stdl, usedPTO, PTOdays])
+                biweeklylistcounter += 1
+                numberofLOA.append([0])  
+                weekcounter += 1 
+                usedPTO = 0
+                usedSDI = 0
+                usedSTDL = 0
+            else:    
+                weekcounter += 1
+
+            
+            
+    counter = 1
+    for period in numberofLOA:
+            print('For biweekly period ' +  str(counter) + ' use:')
+            print('SDI: ' + str(period[-1][0]))
+            print('Left over SDI: ' + str(period[-1][1]))
+            print('STDL: ' + str(period[-1][2]))
+            print('Left over STDL: ' + str(period[-1][3]))
+            print('PTO: ' + str(period[-1][4]))
+            print('Left over PTO: ' + str(period[-1][5]))
+            print('Left over PTO hours: ' + str(PTO[2]))
+            print('You will make: ' + str(period[0]))
+            print('You will not make: ' + str(biweeklypay - period[0]))
+            print('\n')
+            counter += 1
+    
 
 
 
 
-print(weeksdayextractor())
+print(loacalculator())

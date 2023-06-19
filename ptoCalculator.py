@@ -127,14 +127,16 @@ def Holidays(CleanDaysofBimonthly):
             Bicounter += 1
         Holiday = input("List Holidays or Days off (ex. 06/04). When you are finished type 'done': ")
     return(CleanDaysofBimonthly)
-        
+
+
+SDIavailibity = 0
 def SDIandSDTL():
     SDI = int(input("how many weeks of SDI does employee get? (ex. 1, 8, etc. only one number): "))
     SDIamount = int(input("How much money is in one week of SDI: "))
     question = input("Does employee get SDTL? (y / n): ")
     SDTL = 0
     if question == 'y':
-        
+        SDIavailibity += 1
         SDTL = int(input("how many days of STDL does employee get? (ex. 1, 8, etc. only one number): "))
     return([SDI, SDTL, SDIamount])
 
@@ -167,20 +169,20 @@ def TheMommyProject():
     usedPTO = 0
     usedSDI = 0
     usedSTDL = 0
-    SDIavailability = 0
+    
     for semimonthly in SemiMonthlyMaster[0:1]:
         PTOamount = semimonthly[-2]
         STDLamount = (int(semimonthly[-2]) - int((SDIamount/5)))
         SemiMonthlyMaster[counter][-1][0] += ((lengthofbeginning - len(semimonthly[:-2])) * PTOamount)
         
         for day in semimonthly[:-2]:
-            if SDIavailability == 1:   
+            if SDIavailibity == 1:   
                 if sdi > 0:
-                    if day[1] == 4:
+                    if day[1] == 0:
                         usedSDI += 1
                         sdi -= 1
                         SemiMonthlyMaster[counter][-1][0] += SDIamount
-            SDIavailability += 1
+
 
         for day in semimonthly[:-2]:
                     if (stdl > 0):
