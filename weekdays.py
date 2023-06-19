@@ -11,7 +11,8 @@ def PTOtoDays():
 SDIavailibity = 0
 def SDIandSDTL():
     SDI = int(input("how many weeks of SDI does employee get? (ex. 1, 8, etc. only one number): "))
-    SDIamount = int(input("How much money is in one week of SDI: "))
+    if SDI != 0:
+        SDIamount = int(input("How much money is in one week of SDI: "))
     question = input("Does employee get SDTL? (y / n): ")
     SDTL = 0
     if question == 'y':
