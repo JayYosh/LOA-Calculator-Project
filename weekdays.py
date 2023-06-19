@@ -41,23 +41,27 @@ def loacalculator():
     week2 = ''
     digitofweeks = int(input("how total COMPLETE weeks are the employee gone for? : "))
     
-
+    week1 = input("is the FIRST WEEK, the first or second week of the pay cycle? (1/2): ")
     if input("is there an incomplete week in the beginning? (y/n) ") == 'y':        
-        week1 = input("is it the first or second week of the pay cycle? (1/2): ")
+        
         beginningweek = (int(input("how many days are they gone for? (ex. 4): ")))
+
         if week1 == '1':
             numberofweeks.append(beginningweek)
-            
+    else: 
+        beginningweek = 5
 
     
     for x in range(digitofweeks):
         numberofweeks.append(5)
 
-
-    if input("is there an incomplete week in the end? (y/n):  "):
-        week2 = input("is it the first or second week of the pay cycle? (1/2): ")
+    week2 = input("is the LAST WEEK, the first or second week of the pay cycle? (1/2): ")
+    if input("is there an incomplete week in the end? (y/n):  ") == 'y':
+        
         endweek = (int(input("how many days are they gone for? (ex. 4): "))) 
         numberofweeks.append(endweek)
+    else:
+         endweek = 5
         
     
    
@@ -85,7 +89,7 @@ def loacalculator():
     weekcounter = 1 
     biweeklylistcounter = 0
     for week in numberofweeks:
-        counter = 1
+        counter = 0
         
 
         if (weekcounter == 1):
@@ -95,7 +99,7 @@ def loacalculator():
                 
                 while counter != (beginningweek + 1):
                     if (sdi > 0):
-                        if (counter == 1) or (counter == 6):
+                        if (counter == 0):
                             usedSDI += 1
                             sdi -= 1
                             numberofLOA[biweeklylistcounter][0] += (SDIamount)
@@ -109,9 +113,10 @@ def loacalculator():
                             numberofLOA[biweeklylistcounter][0] += (dailyamount) 
                     counter += 1
             else:
+                weekcounter += 1
+                numberofLOA[biweeklylistcounter][0] += (dailyamount*5)
                 while counter != beginningweek:
-                    numberofLOA[biweeklylistcounter] += (dailyamount*5)
-                    if (sdi > 0):
+                    if (sdi > 0) and ((numberofLOA[biweeklylistcounter][0] + (SDIamount))) <= biweeklypay:
                         if (counter == 1) or (counter == 6):
                             usedSDI += 1
                             sdi -= 1
@@ -120,7 +125,7 @@ def loacalculator():
                         usedSTDL += 1
                         stdl -= 1
                         numberofLOA[biweeklylistcounter][0] += STDLamount
-                    elif ((PTOdays > 0) and ((numberofLOA[biweeklylistcounter][0] + PTOamount + (dailyamount*(10 - beginningweek))) <= biweeklypay)):
+                    elif ((PTOdays > 0) and ((numberofLOA[biweeklylistcounter][0] + (dailyamount))) <= biweeklypay):
                             usedPTO += 1
                             PTOdays -= 1 
                             numberofLOA[biweeklylistcounter][0] += (dailyamount) 
@@ -138,16 +143,16 @@ def loacalculator():
                 weekcounter += 1
                 
 
-        elif weekcounter == len(numberofweeks):
-            if week2 == 1:
-                numberofLOA[biweeklylistcounter] += (5*dailyamount)
+        elif weekcounter == (len(numberofweeks) + 1):
+            if week2 == '1':
+                numberofLOA[biweeklylistcounter][0] += (5*dailyamount)
             while counter != endweek:
                 if (sdi > 0):
-                    if (counter == 1):
+                    if (counter == 0):
                         usedSDI += 1
                         sdi -= 1
                         numberofLOA[biweeklylistcounter][0] += (SDIamount)
-                if (stdl > 0) and ((counter == 1) or (counter == 6)):
+                if (stdl > 0):
                     usedSTDL += 1
                     stdl -= 1
                     numberofLOA[biweeklylistcounter][0] += STDLamount
@@ -166,15 +171,17 @@ def loacalculator():
                 usedSTDL = 0
             else: 
                 weekcounter += 1
+                numberofLOA[biweeklylistcounter].append([usedSDI, sdi, usedSTDL, stdl, usedPTO, PTOdays])
+
                 
            
                         
 
         else:
-            counter = 1
-            while counter != 6:
+            counter = 0
+            while counter != 5:
                 if (sdi > 0):
-                    if (counter == 1) or (counter == 6):
+                    if (counter == 0):
                             usedSDI += 1
                             sdi -= 1
                             numberofLOA[biweeklylistcounter][0] += (SDIamount)
